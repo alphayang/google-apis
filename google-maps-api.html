@@ -43,7 +43,11 @@ Any number of components can use `<google-maps-api>` elements, and the library w
         type: String,
         value: 'https://maps.googleapis.com/maps/api/js?callback=%%callback%%'
       },
-
+      /** @private */
+      mapsUrl_CN: {
+        type: String,
+        value: 'http://www.google.cn/maps/api/js?callback=%%callback%%'
+      },
       /**
        * A Maps API key. To obtain an API key, see developers.google.com/maps/documentation/javascript/tutorial#api_key.
        */
@@ -80,6 +84,14 @@ Any number of components can use `<google-maps-api>` elements, and the library w
         type: String,
         value: ''
       },
+      
+      /**
+       * The localized tiles to load the Maps API with specifed country. 
+       */
+      country: {
+        type: String,
+        value: ''
+      },
       /**
        * If true, sign-in is enabled.
        * See https://developers.google.com/maps/documentation/javascript/signedin#enable_sign_in
@@ -88,6 +100,7 @@ Any number of components can use `<google-maps-api>` elements, and the library w
         type: Boolean,
         value: false
       },
+      
 
       /**
        * Fired when the Maps API library is loaded and ready.
@@ -104,13 +117,20 @@ Any number of components can use `<google-maps-api>` elements, and the library w
       /** @private */
       libraryUrl: {
         type: String,
-        computed: '_computeUrl(mapsUrl, version, apiKey, clientId, language, signedIn)'
+        computed: '_computeUrl(mapsUrl, version, apiKey, clientId, language, signedIn,country)'
       }
     },
 
-    _computeUrl: function(mapsUrl, version, apiKey, clientId, language, signedIn) {
-      var url = mapsUrl + '&v=' + version;
-
+    _computeUrl: function(mapsUrl, version, apiKey, clientId, language, signedIn,country) {
+        var url;
+        //todo: neet to check the country value to match, currenty I only have idea for maps api for China info
+      if (country) {
+            url = mapsUrl_CN + '&v=' + version;
+      }else
+        {
+            url = mapsUrl + '&v=' + version;
+        }
+      
       // Always load all Maps API libraries.
       url += '&libraries=drawing,geometry,places,visualization';
 
